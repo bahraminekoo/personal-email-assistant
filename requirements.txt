@@ -1,0 +1,8 @@
+langchain
+langgraph
+langchain_huggingface
+transformers
+huggingface_hub
+python-dotenv
+typer
+rich
