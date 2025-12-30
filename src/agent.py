@@ -16,9 +16,9 @@ class EmailState(TypedDict):
 # Create a local Hugging Face pipeline using model from .env
 def create_llm():
     generator = pipeline(
-        "text-generation",   # TinyLlama is causal, so use text-generation
-        model=DEFAULT_MODEL, # ✅ loaded from .env
-        device=-1,
+        "text-generation",   
+        model=DEFAULT_MODEL, 
+        device=-1, # cpu
         max_new_tokens=256,
         temperature=0.6
     )
