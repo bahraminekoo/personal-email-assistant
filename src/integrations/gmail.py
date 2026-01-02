@@ -46,3 +46,14 @@ def send_reply(to: str, subject: str, body: str):
     message["subject"] = subject
     raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
     service.users().messages().send(userId="me", body={"raw": raw}).execute()
+
+def get_message_details(message_id: str):
+    """Fetch full message details (headers + snippet)."""
+    service = get_service()
+    msg = service.users().messages().get(userId="me", id=message_id, format="full").execute()
+    headers = msg["payload"]["headers"]
+    subject = next((h["value"] for h in headers if h["name"] == "Subject"), "")
+    sender = next((h["value"] for h in headers if h["name"] == "From"), "")
+    snippet = msg.get("snippet", "")
+    return {"id": message_id, "subject": subject, "sender": sender, "snippet": snippet}
+
