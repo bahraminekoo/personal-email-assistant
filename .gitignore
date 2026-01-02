@@ -201,6 +201,10 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# Google api credentials
+credentials.json
+token.json
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
