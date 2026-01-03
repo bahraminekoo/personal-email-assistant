@@ -66,6 +66,7 @@ An AI‑powered assistant that reads emails, decides whether they need a reply, 
    pip install -r requirements.txt
 
 3. **Configure environment**
+   ```
    Create a .env file:
    DEFAULT_MODEL=TinyLlama/TinyLlama-1.1B-Chat-v1.0
    SIGNATURE_NAME=Hossein
@@ -76,6 +77,7 @@ An AI‑powered assistant that reads emails, decides whether they need a reply, 
 
    # Comma-separated list of keywords to skip
    SKIP_KEYWORDS=newsletter,no-reply,promotion
+   ```
     
 4. **Set up Gmail API**
    - Enable Gmail API in Google Cloud Console
@@ -105,13 +107,14 @@ Auto‑reply to unread Gmail:
    python -m src.cli gmail-auto-reply --limit 2
 
 📐 Project Structure
-
+```
 src/
    agent.py              # LangGraph agent logic
    cli.py                # Typer CLI commands
    config.py             # Environment variable loader
    integrations/
       gmail.py          # Gmail API helpers
+```      
 
 🔮 Roadmap
 
