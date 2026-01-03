@@ -25,6 +25,10 @@ An AI‑powered assistant that reads emails, decides whether they need a reply, 
   - OAuth2 authentication with Gmail API.
   - Fetch unread emails, extract sender + subject.
   - Send replies directly from the assistant.
+  - ✅ **Mark messages as read after replying** (prevents duplicate replies).
+  - ✅ **Configurable filters**:
+     - Skip newsletters, no‑reply addresses, or promotional emails.
+     - Restrict replies to specific senders via `.env`.
 
 ---
 
@@ -55,7 +59,7 @@ An AI‑powered assistant that reads emails, decides whether they need a reply, 
 
 1. **Clone the repo**
    ```bash
-   git clone https://github.com/yourusername/personal-email-assistant.git
+   git clone https://github.com/bahraminekoo/personal-email-assistant.git
    cd personal-email-assistant
 
 2. **Install dependencies**
@@ -67,6 +71,11 @@ An AI‑powered assistant that reads emails, decides whether they need a reply, 
    SIGNATURE_NAME=Hossein
    SIGNATURE_EMAIL=hossein@example.com
    SIGNATURE_COMPANY=Personal Email Assistant
+   # Comma-separated list of allowed senders
+   ALLOWED_SENDERS=boss@example.com,friend@example.com
+
+   # Comma-separated list of keywords to skip
+   SKIP_KEYWORDS=newsletter,no-reply,promotion
     
 4. **Set up Gmail API**
    - Enable Gmail API in Google Cloud Console
@@ -98,21 +107,23 @@ Auto‑reply to unread Gmail:
 📐 Project Structure
 
 src/
-├── agent.py              # LangGraph agent logic
-├── cli.py                # Typer CLI commands
-├── config.py             # Environment variable loader
-└── integrations/
-    └── gmail.py          # Gmail API helpers
+   agent.py              # LangGraph agent logic
+   cli.py                # Typer CLI commands
+   config.py             # Environment variable loader
+   integrations/
+      gmail.py          # Gmail API helpers
 
 🔮 Roadmap
 
-   - [ ] Mark Gmail messages as read after replying.
+   - [x] Mark Gmail messages as read after replying
 
-   - [ ] Add filters (skip newsletters, only reply to specific senders).
+   - [x] Configurable filters via .env (skip keywords, allowed senders)
 
    - [ ] Support multiple signatures / personas.
 
    - [ ] Add logging and monitoring.
+
+   - [ ] Store skipped emails for later review
 
 🤝 Contributing
 

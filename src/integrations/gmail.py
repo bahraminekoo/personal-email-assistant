@@ -7,6 +7,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from src.config import ALLOWED_SENDERS, SKIP_KEYWORDS
 
 # If modifying scopes, delete token.json
 SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
@@ -56,4 +57,31 @@ def get_message_details(message_id: str):
     sender = next((h["value"] for h in headers if h["name"] == "From"), "")
     snippet = msg.get("snippet", "")
     return {"id": message_id, "subject": subject, "sender": sender, "snippet": snippet}
+
+def mark_as_read(message_id: str):
+    """Mark a Gmail message as read (remove UNREAD label)."""
+    service = get_service()
+    service.users().messages().modify(
+        userId="me",
+        id=message_id,
+        body={"removeLabelIds": ["UNREAD"]}
+    ).execute()
+
+def should_reply(details: dict) -> bool:
+    """Decide if we should reply to this email."""
+    sender = details["sender"].lower()
+    subject = details["subject"].lower()
+
+    # Skip if subject or sender contains any keyword
+    for keyword in SKIP_KEYWORDS:
+        if keyword in subject or keyword in sender:
+            return False
+
+    # Only reply to allowed senders if list is non-empty
+    if ALLOWED_SENDERS and not any(s in sender for s in ALLOWED_SENDERS):
+        return False
+
+    return True
+
+   
 

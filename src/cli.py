@@ -3,7 +3,7 @@ from pathlib import Path
 from rich.console import Console
 from rich.panel import Panel
 from src.agent import draft_reply
-from src.integrations.gmail import list_unread_emails, get_message_details, send_reply
+from src.integrations.gmail import list_unread_emails, get_message_details, send_reply, mark_as_read, should_reply
 
 app = typer.Typer(add_completion=False)
 console = Console()
@@ -67,11 +67,19 @@ def gmail_auto_reply(limit: int = typer.Option(2, help="Number of unread emails 
 
     for e in emails:
         details = get_message_details(e["id"])
+        if not should_reply(details):
+            console.print(Panel.fit(
+                f"Skipped: {details['subject']} from {details['sender']}",
+                style="bold yellow"
+            ))
+            continue
+
         console.print(Panel.fit(f"Drafting reply to: {details['sender']}", style="bold cyan"))
         reply_text = draft_reply(details["snippet"])
         send_reply(details["sender"], f"Re: {details['subject']}", reply_text)
+        mark_as_read(details["id"])   # ✅ mark as read
         console.print(Panel(reply_text, title=f"Reply sent to {details['sender']}", subtitle=details["subject"]))
-
+   
 
 
 if __name__ == "__main__":
